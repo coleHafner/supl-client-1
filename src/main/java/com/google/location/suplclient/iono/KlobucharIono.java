@@ -14,10 +14,16 @@
 
 package com.google.location.suplclient.iono;
 
+import java.util.BitSet;
+
 /** A container for fields in Klobuchar Iono Model */
 public class KlobucharIono extends GnssIonoModel {
 
-    /** Satellite user range accuracy (meters) */
+
+    /** Klobuchar model data source ID, where '00': All, '01': BDS, '11': QZSS */
+    public final byte[]  dataId = new byte[2];
+
+    /** Ionospheric model value for alpha */
     public final double[] alpha = new double[4];
 
     /** The group delay term (seconds) */
@@ -25,6 +31,10 @@ public class KlobucharIono extends GnssIonoModel {
 
     private KlobucharIono(Builder builder) {
         super(builder);
+        for (int i = 0; i < dataId.length; ++i) {
+            dataId[i] = builder.dataId[i];
+        }
+
         for (int i = 0; i < alpha.length; ++i) {
             alpha[i] = builder.alpha[i];
         }
@@ -41,7 +51,8 @@ public class KlobucharIono extends GnssIonoModel {
     /** Builder for {@link KlobucharIono} */
     public static class Builder extends GnssIonoModel.Builder<Builder> {
 
-        // For documentation, see corresponding fields in {@link GpsEphemeris}.
+        // For documentation, see corresponding fields in {@link GnssIonoModel}.
+        private byte[] dataId = new byte[2];
         private double[] alpha = new double[4];
         private double[] beta = new double[4];
 
@@ -50,6 +61,15 @@ public class KlobucharIono extends GnssIonoModel {
         @Override
         public Builder getThis() {
             return this;
+        }
+
+        /** Sets the data source ID. */
+        public Builder setDataId(byte[] dataId) {
+            for(int i=0; i<dataId.length; i++){
+                this.dataId[i] = dataId[i];
+            }
+
+            return getThis();
         }
 
         /** Sets the satellite user range accuracy (meters). */

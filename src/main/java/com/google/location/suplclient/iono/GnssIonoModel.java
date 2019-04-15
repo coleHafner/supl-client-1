@@ -18,24 +18,24 @@ package com.google.location.suplclient.iono;
 public abstract class GnssIonoModel {
 
   /** The constellation ID associated with this ionospheric model */
-  public final int sysid;
+  public final int sysId;
 
   protected GnssIonoModel(Builder<?> builder) {
-    sysid = builder.sysid;
+    sysId = builder.sysId;
   }
 
   /** Builder for {@link GnssIonoModel} */
   public abstract static class Builder<T extends Builder<T>> {
 
-    private int sysid;
+    private int sysId;
 
     public Builder() {}
 
     public abstract T getThis();
 
-    /** Sets the {@link #sysid}. */
-    public T setSysid(int sysid) {
-      this.sysid = sysid;
+    /** Sets the {@link #sysId}. */
+    public T setSysid(int sysId) {
+      this.sysId = sysId;
       return getThis();
     }
   }

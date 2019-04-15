@@ -64,6 +64,9 @@ class SuplLppClientHelper {
    */
   static GnssIonoModel buildGnssIonoModel(KlobucharModelParameter iono) {
     KlobucharIono.Builder ionoBuilder = KlobucharIono.newBuilder();
+    byte[] dataId = iono.getDataID().getValue().toByteArray();
+    ionoBuilder.setDataId(dataId);
+
     double[] alpha = new double[4];
     alpha[0] = iono.getAlfa0().getInteger().byteValue() * ScaleFactors.IONO_ALFA_0;
     alpha[1] = iono.getAlfa1().getInteger().byteValue() * ScaleFactors.IONO_ALFA_1;
@@ -99,11 +102,11 @@ class SuplLppClientHelper {
     }
 
     double[] ionoStormFlag = new double[5];
-    ionoStormFlag[0] = iono.getIonoStormFlag1().getInteger().byteValue();
-    ionoStormFlag[1] = iono.getIonoStormFlag2().getInteger().byteValue();
-    ionoStormFlag[2] = iono.getIonoStormFlag3().getInteger().byteValue();
-    ionoStormFlag[3] = iono.getIonoStormFlag4().getInteger().byteValue();
-    ionoStormFlag[4] = iono.getIonoStormFlag5().getInteger().byteValue();
+    ionoStormFlag[0] = (iono.getIonoStormFlag1() == null) ? -1.0 :iono.getIonoStormFlag1().getInteger().byteValue();
+    ionoStormFlag[1] = (iono.getIonoStormFlag2() == null) ? -1.0 :iono.getIonoStormFlag2().getInteger().byteValue();
+    ionoStormFlag[2] = (iono.getIonoStormFlag3() == null) ? -1.0 :iono.getIonoStormFlag3().getInteger().byteValue();
+    ionoStormFlag[3] = (iono.getIonoStormFlag4() == null) ? -1.0 :iono.getIonoStormFlag4().getInteger().byteValue();
+    ionoStormFlag[4] = (iono.getIonoStormFlag5() == null) ? -1.0 :iono.getIonoStormFlag5().getInteger().byteValue();
     for (int i = 0; i < ionoStormFlag.length; ++i) {
       ionoBuilder.addIonoStormFlag(ionoStormFlag[i], i);
     }
