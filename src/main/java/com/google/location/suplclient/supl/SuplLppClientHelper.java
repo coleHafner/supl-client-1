@@ -19,6 +19,7 @@ import com.google.location.suplclient.asn1.supl2.lpp.GNSS_ID_GLONASS;
 import com.google.location.suplclient.asn1.supl2.lpp.GNSS_ID_GLONASS_SatElement;
 import com.google.location.suplclient.asn1.supl2.lpp.GNSS_SystemTime;
 import com.google.location.suplclient.asn1.supl2.lpp.KlobucharModelParameter;
+import com.google.location.suplclient.asn1.supl2.lpp.NeQuickModelParameterV12;
 import com.google.location.suplclient.asn1.supl2.lpp.NAV_ClockModel;
 import com.google.location.suplclient.asn1.supl2.lpp.NavModelKeplerianSet;
 import com.google.location.suplclient.asn1.supl2.lpp.NavModelNAV_KeplerianSet;
@@ -36,7 +37,9 @@ import com.google.location.suplclient.ephemeris.GloEphemeris;
 import com.google.location.suplclient.ephemeris.GnssEphemeris;
 import com.google.location.suplclient.ephemeris.GpsEphemeris;
 import com.google.location.suplclient.ephemeris.KeplerianModel;
-import com.google.location.suplclient.supl.Ephemeris.IonosphericModelProto;
+import com.google.location.suplclient.iono.GnssIonoModel;
+import com.google.location.suplclient.iono.KlobucharIono;
+import com.google.location.suplclient.iono.NeQuickIono;
 import com.google.location.suplclient.supl.SuplConstants.GnssConstants;
 import com.google.location.suplclient.supl.SuplConstants.LppConstants;
 import com.google.location.suplclient.supl.SuplConstants.ScaleFactors;
@@ -50,24 +53,24 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 /**
- * A helper that contains methods to convert SUPL LPP messages to {@link IonosphericModelProto} and
+ * A helper that contains methods to convert SUPL LPP messages to {@link GnssIonoModel} and
  * instances of {@link GnssEphemeris}.
  */
 class SuplLppClientHelper {
 
   /**
-   * Builds an instance of {@link IonosphericModelProto} containing Klobuchar model parameters
+   * Builds an instance of {@link GnssIonoModel} containing Klobuchar model parameters
    * extracted from {@link KlobucharModelParameter}.
    */
-  static IonosphericModelProto buildIonoModelProto(KlobucharModelParameter iono) {
-    IonosphericModelProto.Builder ionoBuilder = IonosphericModelProto.newBuilder();
+  static GnssIonoModel buildGnssIonoModel(KlobucharModelParameter iono) {
+    KlobucharIono.Builder ionoBuilder = KlobucharIono.newBuilder();
     double[] alpha = new double[4];
     alpha[0] = iono.getAlfa0().getInteger().byteValue() * ScaleFactors.IONO_ALFA_0;
     alpha[1] = iono.getAlfa1().getInteger().byteValue() * ScaleFactors.IONO_ALFA_1;
     alpha[2] = iono.getAlfa2().getInteger().byteValue() * ScaleFactors.IONO_ALFA_2;
     alpha[3] = iono.getAlfa3().getInteger().byteValue() * ScaleFactors.IONO_ALFA_3;
     for (int i = 0; i < alpha.length; ++i) {
-      ionoBuilder.addAlpha(alpha[i]);
+      ionoBuilder.addAlpha(alpha[i], i);
     }
 
     double[] beta = new double[4];
@@ -76,7 +79,33 @@ class SuplLppClientHelper {
     beta[2] = iono.getBeta2().getInteger().byteValue() * ScaleFactors.IONO_BETA_2;
     beta[3] = iono.getBeta3().getInteger().byteValue() * ScaleFactors.IONO_BETA_3;
     for (int i = 0; i < beta.length; ++i) {
-      ionoBuilder.addBeta(beta[i]);
+      ionoBuilder.addBeta(beta[i], i);
+    }
+    return ionoBuilder.build();
+  }
+
+  /**
+   * Builds an instance of {@link GnssIonoModel} containing NeQuick model parameters
+   * extracted from {@link NeQuickModelParameter}.
+   */
+  static GnssIonoModel buildGnssIonoModel(NeQuickModelParameterV12 iono) {
+    NeQuickIono.Builder ionoBuilder = NeQuickIono.newBuilder();
+    double[] ai = new double[3];
+    ai[0] = iono.getAi0().getInteger().byteValue() * ScaleFactors.GAL_IONO_AIO;
+    ai[1] = iono.getAi1().getInteger().byteValue() * ScaleFactors.GAL_IONO_AI1;
+    ai[2] = iono.getAi2().getInteger().byteValue() * ScaleFactors.GAL_IONO_AI2;
+    for (int i = 0; i < ai.length; ++i) {
+      ionoBuilder.addAi(ai[i], i);
+    }
+
+    double[] ionoStormFlag = new double[5];
+    ionoStormFlag[0] = iono.getIonoStormFlag1().getInteger().byteValue();
+    ionoStormFlag[1] = iono.getIonoStormFlag2().getInteger().byteValue();
+    ionoStormFlag[2] = iono.getIonoStormFlag3().getInteger().byteValue();
+    ionoStormFlag[3] = iono.getIonoStormFlag4().getInteger().byteValue();
+    ionoStormFlag[4] = iono.getIonoStormFlag5().getInteger().byteValue();
+    for (int i = 0; i < ionoStormFlag.length; ++i) {
+      ionoBuilder.addIonoStormFlag(ionoStormFlag[i], i);
     }
     return ionoBuilder.build();
   }

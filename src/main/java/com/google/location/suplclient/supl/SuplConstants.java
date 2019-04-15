@@ -117,5 +117,8 @@ public class SuplConstants {
     public static final double GAL_CLK_AF2 = Math.pow(2, -59);
     public static final double GAL_CLK_TGD = Math.pow(2, -32);
     public static final double GAL_CLK_TOC = 60;
+    public static final double GAL_IONO_AIO = Math.pow(2, -2);
+    public static final double GAL_IONO_AI1 = Math.pow(2, -8);
+    public static final double GAL_IONO_AI2 = Math.pow(2, -15);
   }
 }

@@ -14,7 +14,8 @@
 
 package com.google.location.suplclient.ephemeris;
 
-import com.google.location.suplclient.supl.Ephemeris.IonosphericModelProto;
+import com.google.location.suplclient.iono.GnssIonoModel;
+
 import java.util.List;
 
 /** A container for GNSS satellite ephemeris and Ionospheric model parameters. */
@@ -24,11 +25,11 @@ public class EphemerisResponse {
   public final List<GnssEphemeris> ephList;
 
   /* The parameters of the ionospheric model */
-  public final IonosphericModelProto ionoProto;
+  public final List<GnssIonoModel> ionoModelList;
 
   /* Constructor */
-  public EphemerisResponse(List<GnssEphemeris> ephList, IonosphericModelProto ionoProto) {
+  public EphemerisResponse(List<GnssEphemeris> ephList, List<GnssIonoModel> ionoModelList) {
     this.ephList = ephList;
-    this.ionoProto = ionoProto;
+    this.ionoModelList = ionoModelList;
   }
 }

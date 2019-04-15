@@ -23,7 +23,7 @@ import com.google.location.suplclient.asn1.supl2.supl_pos.SUPLPOS;
 import com.google.location.suplclient.asn1.supl2.ulp_version_2_parameter_extensions.Ver2_PosPayLoad_extension;
 import com.google.location.suplclient.ephemeris.EphemerisResponse;
 import com.google.location.suplclient.ephemeris.GnssEphemeris;
-import com.google.location.suplclient.supl.Ephemeris.IonosphericModelProto;
+import com.google.location.suplclient.iono.GnssIonoModel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -66,9 +66,16 @@ final class SuplLppClient extends SuplClient {
     A_GNSS_ProvideAssistanceData assistData =
         SuplLppClientHelper.getAssistanceDataFromSuplPos(message);
 
-    IonosphericModelProto ionoProto =
-        SuplLppClientHelper.buildIonoModelProto(
-            assistData.getGnss_CommonAssistData().getGnss_IonosphericModel().getKlobucharModel());
+    // Get the Ionospheric Model information
+    List<GnssIonoModel> ionoModelList = new ArrayList<>();
+
+    // Get Klobuchar Models available
+    ionoModelList.add(SuplLppClientHelper.buildGnssIonoModel(
+            assistData.getGnss_CommonAssistData().getGnss_IonosphericModel().getKlobucharModel()));
+
+    // Get NeQuick Models available
+    ionoModelList.add(SuplLppClientHelper.buildGnssIonoModel(
+            assistData.getGnss_CommonAssistData().getGnss_IonosphericModel().getNeQuickModel()));
 
     GNSS_SystemTime gnssSystemTime =
         assistData.getGnss_CommonAssistData().getGnss_ReferenceTime().getGnss_SystemTime();
@@ -106,7 +113,7 @@ final class SuplLppClient extends SuplClient {
       }
     }
 
-    return new EphemerisResponse(ephList, ionoProto);
+    return new EphemerisResponse(ephList, ionoModelList);
   }
 
   private DateTime toGloTime(DateTime dateTime) {
