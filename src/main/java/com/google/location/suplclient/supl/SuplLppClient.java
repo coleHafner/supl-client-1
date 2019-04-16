@@ -21,9 +21,9 @@ import com.google.location.suplclient.asn1.supl2.lpp_ver12.GNSS_GenericAssistDat
 import com.google.location.suplclient.asn1.supl2.lpp_ver12.LPP_Message;
 import com.google.location.suplclient.asn1.supl2.supl_pos.SUPLPOS;
 import com.google.location.suplclient.asn1.supl2.ulp_version_2_parameter_extensions.Ver2_PosPayLoad_extension;
-import com.google.location.suplclient.ephemeris.EphemerisResponse;
 import com.google.location.suplclient.ephemeris.GnssEphemeris;
 import com.google.location.suplclient.iono.GnssIonoModel;
+import com.google.location.suplclient.utc.GnssUtcModel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -62,7 +62,7 @@ final class SuplLppClient extends SuplClient {
   }
 
   @Override
-  protected EphemerisResponse suplPosToEphResponse(SUPLPOS message) {
+  protected SuplResponse suplPosToEphResponse(SUPLPOS message) {
     A_GNSS_ProvideAssistanceData assistData =
         SuplLppClientHelper.getAssistanceDataFromSuplPos(message);
 
@@ -113,7 +113,14 @@ final class SuplLppClient extends SuplClient {
       }
     }
 
-    return new EphemerisResponse(ephList, ionoModelList);
+    // Get the UTC model information
+    List<GnssUtcModel> utcModelList = new ArrayList<>();
+    for (GNSS_GenericAssistDataElement element : assistDataSequence.getValues()) {
+      utcModelList.add(SuplLppClientHelper.buildGnssUtcModel(
+              element.getGnss_UTC_Model()));
+    }
+
+    return new SuplResponse(ephList, ionoModelList, utcModelList);
   }
 
   private DateTime toGloTime(DateTime dateTime) {

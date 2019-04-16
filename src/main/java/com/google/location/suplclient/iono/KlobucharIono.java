@@ -14,8 +14,6 @@
 
 package com.google.location.suplclient.iono;
 
-import java.util.BitSet;
-
 /** A container for fields in Klobuchar Iono Model */
 public class KlobucharIono extends GnssIonoModel {
 

@@ -14,17 +14,7 @@
 
 package com.google.location.suplclient.supl;
 
-import com.google.location.suplclient.asn1.supl2.lpp.GLONASS_ClockModel;
-import com.google.location.suplclient.asn1.supl2.lpp.GNSS_ID_GLONASS;
-import com.google.location.suplclient.asn1.supl2.lpp.GNSS_ID_GLONASS_SatElement;
-import com.google.location.suplclient.asn1.supl2.lpp.GNSS_SystemTime;
-import com.google.location.suplclient.asn1.supl2.lpp.KlobucharModelParameter;
-import com.google.location.suplclient.asn1.supl2.lpp.NeQuickModelParameterV12;
-import com.google.location.suplclient.asn1.supl2.lpp.NAV_ClockModel;
-import com.google.location.suplclient.asn1.supl2.lpp.NavModelKeplerianSet;
-import com.google.location.suplclient.asn1.supl2.lpp.NavModelNAV_KeplerianSet;
-import com.google.location.suplclient.asn1.supl2.lpp.NavModel_GLONASS_ECEF;
-import com.google.location.suplclient.asn1.supl2.lpp.StandardClockModelElementV12;
+import com.google.location.suplclient.asn1.supl2.lpp.*;
 import com.google.location.suplclient.asn1.supl2.lpp_ver12.A_GNSS_ProvideAssistanceData;
 import com.google.location.suplclient.asn1.supl2.lpp_ver12.GNSS_NavModelSatelliteElement;
 import com.google.location.suplclient.asn1.supl2.lpp_ver12.GNSS_NavigationModel;
@@ -40,6 +30,12 @@ import com.google.location.suplclient.ephemeris.KeplerianModel;
 import com.google.location.suplclient.iono.GnssIonoModel;
 import com.google.location.suplclient.iono.KlobucharIono;
 import com.google.location.suplclient.iono.NeQuickIono;
+import com.google.location.suplclient.utc.GnssUtcModel;
+import com.google.location.suplclient.utc.UtcModelSet1;
+import com.google.location.suplclient.utc.UtcModelSet2;
+import com.google.location.suplclient.utc.UtcModelSet3;
+import com.google.location.suplclient.utc.UtcModelSet4;
+import com.google.location.suplclient.utc.UtcModelSet5;
 import com.google.location.suplclient.supl.SuplConstants.GnssConstants;
 import com.google.location.suplclient.supl.SuplConstants.LppConstants;
 import com.google.location.suplclient.supl.SuplConstants.ScaleFactors;
@@ -57,6 +53,124 @@ import org.joda.time.DateTimeZone;
  * instances of {@link GnssEphemeris}.
  */
 class SuplLppClientHelper {
+
+  /**
+   * Builds an instance of {@link GnssUtcModel} containing UTC model parameters.
+   */
+  static GnssUtcModel buildGnssUtcModel(GNSS_UTC_Model utc) {
+
+    if(utc.isUtcModel1() == true){
+      return buildUtcModelSet1(utc.getUtcModel1());
+    }
+    else if(utc.isUtcModel2() == true){
+      return buildUtcModelSet2(utc.getUtcModel2());
+    }
+    else if(utc.isUtcModel3() == true){
+      return buildUtcModelSet3(utc.getUtcModel3());
+    }
+    else if(utc.isUtcModel4() == true){
+      return buildUtcModelSet4(utc.getUtcModel4());
+    }
+    else if(utc.isExtensionUtcModel5_r12() == true){
+      return buildUtcModelSet5(utc.getExtensionUtcModel5_r12());
+    }
+    else{
+      return null;
+    }
+  }
+
+  /**
+   * Builds an instance of {@link GnssUtcModel} containing UTC model set 1 parameters
+   * extracted from {@link UtcModelSet1}.
+   */
+  static GnssUtcModel buildUtcModelSet1(UTC_ModelSet1 utc) {
+    UtcModelSet1.Builder utcSetBuilder = UtcModelSet1.newBuilder();
+
+    utcSetBuilder.setUtcA1(utc.getGnss_Utc_A1().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET1_A1 );
+    utcSetBuilder.setUtcA0(utc.getGnss_Utc_A0().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET1_A0 );
+    utcSetBuilder.setUtcWn(utc.getGnss_Utc_WNt().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET1_WNT );
+    utcSetBuilder.setUtcWnLsf(utc.getGnss_Utc_WNlsf().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET1_WNLSF);
+    utcSetBuilder.setUtcTot(utc.getGnss_Utc_Tot().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET1_TOT );
+    utcSetBuilder.setUtcDeltaTls(utc.getGnss_Utc_DeltaTls().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET1_DELTA_TLS);
+    utcSetBuilder.setUtcDeltaTlsf(utc.getGnss_Utc_DeltaTlsf().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET1_DELTA_TLSF);
+    utcSetBuilder.setUtcDn(utc.getGnss_Utc_DN().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET1_DN);
+
+    return utcSetBuilder.build();
+  }
+
+  /**
+   * Builds an instance of {@link GnssUtcModel} containing UTC model set 2 parameters
+   * extracted from {@link UtcModelSet2}.
+   */
+  static GnssUtcModel buildUtcModelSet2(UTC_ModelSet2 utc) {
+    UtcModelSet2.Builder utcSetBuilder = UtcModelSet2.newBuilder();
+
+    utcSetBuilder.setUtcA0(utc.getUtcA0().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET2_A0 );
+    utcSetBuilder.setUtcA1(utc.getUtcA1().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET2_A1 );
+    utcSetBuilder.setUtcA2(utc.getUtcA2().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET2_A2 );
+    utcSetBuilder.setUtcWnot(utc.getUtcWNot().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET2_WNOT );
+    utcSetBuilder.setUtcDeltaTls(utc.getUtcDeltaTls().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET2_DELTA_TLS);
+    utcSetBuilder.setUtcWnLsf(utc.getUtcWNlsf().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET2_WNLSF);
+    utcSetBuilder.setUtcTot(utc.getUtcTot().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET2_TOT );
+    utcSetBuilder.setUtcDeltaTls(utc.getUtcDeltaTls().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET2_DELTA_TLS);
+    utcSetBuilder.setUtcDeltaTlsf(utc.getUtcDeltaTlsf().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET2_DELTA_TLSF);
+    utcSetBuilder.setUtcDn(Integer.parseInt(utc.getUtcDN().toString()) * ScaleFactors.UTC_MODEL_SET2_DN);
+
+    return utcSetBuilder.build();
+  }
+
+  /**
+   * Builds an instance of {@link GnssUtcModel} containing UTC model set 3 parameters
+   * extracted from {@link UtcModelSet3}.
+   */
+  static GnssUtcModel buildUtcModelSet3(UTC_ModelSet3 utc) {
+    UtcModelSet3.Builder utcSetBuilder = UtcModelSet3.newBuilder();
+
+    utcSetBuilder.setNA(utc.getNA().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET3_NA );
+    utcSetBuilder.setTauC(utc.getTauC().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET3_TAUC );
+    utcSetBuilder.setB1((utc.getB1() == null) ? 0.0 : utc.getB1().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET3_B1 );
+    utcSetBuilder.setB2((utc.getB2() == null) ? 0.0 : utc.getB2().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET3_B2 );
+    utcSetBuilder.setKp((utc.getKp() == null) ? 0.0 : Integer.parseInt(utc.getKp().toString()) * ScaleFactors.UTC_MODEL_SET3_KP);
+
+    return utcSetBuilder.build();
+  }
+
+  /**
+   * Builds an instance of {@link GnssUtcModel} containing UTC model set 4 parameters
+   * extracted from {@link UtcModelSet4}.
+   */
+  static GnssUtcModel buildUtcModelSet4(UTC_ModelSet4 utc) {
+    UtcModelSet4.Builder utcSetBuilder = UtcModelSet4.newBuilder();
+
+    utcSetBuilder.setUtcA1wnt(utc.getUtcA0wnt().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET4_A0_WNT );
+    utcSetBuilder.setUtcA0wnt(utc.getUtcA1wnt().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET4_A1_WNT );
+    utcSetBuilder.setUtcWnt(utc.getUtcWNt().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET4_WNT );
+    utcSetBuilder.setUtcDeltaTls(utc.getUtcDeltaTls().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET4_DELTA_TLS);
+    utcSetBuilder.setUtcWnLsf(utc.getUtcWNlsf().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET4_WNLSF);
+    utcSetBuilder.setUtcTot(utc.getUtcTot().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET4_TOT );
+    utcSetBuilder.setUtcDeltaTls(utc.getUtcDeltaTls().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET4_DELTA_TLS);
+    utcSetBuilder.setUtcDeltaTlsf(utc.getUtcDeltaTlsf().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET4_DELTA_TLSF);
+    utcSetBuilder.setUtcDn(utc.getUtcDN().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET4_DN);
+
+    return utcSetBuilder.build();
+  }
+
+  /**
+   * Builds an instance of {@link GnssUtcModel} containing UTC model set 5 parameters
+   * extracted from {@link UtcModelSet5}.
+   */
+  static GnssUtcModel buildUtcModelSet5(UTC_ModelSet5_r12 utc) {
+    UtcModelSet5.Builder utcSetBuilder = UtcModelSet5.newBuilder();
+
+    utcSetBuilder.setUtcA1(utc.getUtcA1_r12().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET5_A1 );
+    utcSetBuilder.setUtcA0(utc.getUtcA0_r12().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET1_A0 );
+    utcSetBuilder.setUtcWnLsf(utc.getUtcWNlsf_r12().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET5_WNLSF);
+    utcSetBuilder.setUtcDeltaTls(utc.getUtcDeltaTls_r12().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET5_DELTA_TLS);
+    utcSetBuilder.setUtcDeltaTlsf(utc.getUtcDeltaTlsf_r12().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET5_DELTA_TLSF);
+    utcSetBuilder.setUtcDn(utc.getUtcDN_r12().getInteger().byteValue() * ScaleFactors.UTC_MODEL_SET5_DN);
+
+    return utcSetBuilder.build();
+  }
 
   /**
    * Builds an instance of {@link GnssIonoModel} containing Klobuchar model parameters

@@ -120,5 +120,51 @@ public class SuplConstants {
     public static final double GAL_IONO_AIO = Math.pow(2, -2);
     public static final double GAL_IONO_AI1 = Math.pow(2, -8);
     public static final double GAL_IONO_AI2 = Math.pow(2, -15);
+
+    //UTC Model Set1 Constants
+    public static final double UTC_MODEL_SET1_A1 = Math.pow(2, -50);
+    public static final double UTC_MODEL_SET1_A0 = Math.pow(2, -30);
+    public static final double UTC_MODEL_SET1_TOT = Math.pow(2, 12);
+    public static final double UTC_MODEL_SET1_WNT = 1.0;
+    public static final double UTC_MODEL_SET1_DELTA_TLS = 1.0;
+    public static final double UTC_MODEL_SET1_WNLSF = 1.0;
+    public static final double UTC_MODEL_SET1_DN = 1.0;
+    public static final double UTC_MODEL_SET1_DELTA_TLSF = 1.0;
+
+    //UTC Model Set2 Constants
+    public static final double UTC_MODEL_SET2_A0 = Math.pow(2, -35);
+    public static final double UTC_MODEL_SET2_A1 = Math.pow(2, -51);
+    public static final double UTC_MODEL_SET2_A2 = Math.pow(2, -68);
+    public static final double UTC_MODEL_SET2_DELTA_TLS = 1.0;
+    public static final double UTC_MODEL_SET2_TOT = Math.pow(2, 4);
+    public static final double UTC_MODEL_SET2_WNOT = 1.0;
+    public static final double UTC_MODEL_SET2_WNLSF = 1.0;
+    public static final double UTC_MODEL_SET2_DN = 1.0;
+    public static final double UTC_MODEL_SET2_DELTA_TLSF = 1.0;
+
+    //UTC Model Set3 Constants
+    public static final double UTC_MODEL_SET3_NA = 1.0;
+    public static final double UTC_MODEL_SET3_TAUC = Math.pow(2, -31);
+    public static final double UTC_MODEL_SET3_B1 = Math.pow(2, -10);
+    public static final double UTC_MODEL_SET3_B2 = Math.pow(2, -16);
+    public static final double UTC_MODEL_SET3_KP = 1.0;
+
+    //UTC Model Set4 Constants
+    public static final double UTC_MODEL_SET4_A1_WNT = Math.pow(2, -50);
+    public static final double UTC_MODEL_SET4_A0_WNT = Math.pow(2, -30);
+    public static final double UTC_MODEL_SET4_TOT = Math.pow(2, 12);
+    public static final double UTC_MODEL_SET4_WNT = 1.0;
+    public static final double UTC_MODEL_SET4_DELTA_TLS = 1.0;
+    public static final double UTC_MODEL_SET4_WNLSF = 1.0;
+    public static final double UTC_MODEL_SET4_DN = 1.0;
+    public static final double UTC_MODEL_SET4_DELTA_TLSF = 1.0;
+
+    public static final double UTC_MODEL_SET5_A1 = Math.pow(2, -50);
+    public static final double UTC_MODEL_SET5_A0 = Math.pow(2, -30);
+    public static final double UTC_MODEL_SET5_DELTA_TLS = 1.0;
+    public static final double UTC_MODEL_SET5_WNLSF = 1.0;
+    public static final double UTC_MODEL_SET5_DN = 1.0;
+    public static final double UTC_MODEL_SET5_DELTA_TLSF = 1.0;
+
   }
 }

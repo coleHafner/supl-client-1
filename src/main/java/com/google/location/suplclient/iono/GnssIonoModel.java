@@ -17,25 +17,37 @@ package com.google.location.suplclient.iono;
 /** A class representing the ephemeris of any GNSS satellite */
 public abstract class GnssIonoModel {
 
-  /** The constellation ID associated with this ionospheric model */
-  public final int sysId;
+  /** The IE GNSS-ID-Bitmap is used to indicate several GNSSs using a bit map*/
+  public final int gnssId;
+
+  /** The IE GNSS-SignalID is used to indicate a specific GNSS signal type. The interpretation of GNSS-SignalID depends
+  on the GNSS-ID.*/
+  public final int gnssSignalId;
 
   protected GnssIonoModel(Builder<?> builder) {
-    sysId = builder.sysId;
+    gnssId = builder.gnssId;
+    gnssSignalId = builder.gnssSignalId;
   }
 
   /** Builder for {@link GnssIonoModel} */
   public abstract static class Builder<T extends Builder<T>> {
 
-    private int sysId;
+    private int gnssId;
+    private int gnssSignalId;
 
     public Builder() {}
 
     public abstract T getThis();
 
-    /** Sets the {@link #sysId}. */
-    public T setSysid(int sysId) {
-      this.sysId = sysId;
+    /** Sets the {@link #gnssId}. */
+    public T setGnssId(int gnssId) {
+      this.gnssId = gnssId;
+      return getThis();
+    }
+
+    /** Sets the {@link #gnssSignalId}. */
+    public T setGnssSignalId(int gnssSignalId) {
+      this.gnssSignalId = gnssSignalId;
       return getThis();
     }
   }

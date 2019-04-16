@@ -20,7 +20,7 @@ import static com.google.common.base.Preconditions.checkState;
 import com.google.location.suplclient.asn1.supl2.supl_pos.SUPLPOS;
 import com.google.location.suplclient.asn1.supl2.ulp.ULP_PDU;
 import com.google.location.suplclient.asn1.supl2.ulp_components.SessionID;
-import com.google.location.suplclient.ephemeris.EphemerisResponse;
+
 import java.util.logging.Logger;
 
 /**
@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  * connection.
  *
  * <p>A rough location of the receiver has to be known in advance which is passed to the method
- * {@link #generateSuplResult} to obtain a {@link EphemerisResponse} containing the GNSS assistance
+ * {@link #generateSuplResult} to obtain a {@link SuplResponse} containing the GNSS assistance
  * data.
  *
  * <p>The SUPL protocol flow is made over a TCP socket to a server specified via constructor params.
@@ -46,12 +46,12 @@ abstract class SuplClient {
 
   /**
    * Applies the SUPL protocol call flow to obtain the assistance data and store the result in
-   * {@link EphemerisResponse}.
+   * {@link SuplResponse}.
    *
    * <p>A null will be returned if Supl communication fails or if parsing the received message
    * fails.
    */
-  public final EphemerisResponse generateSuplResult(long latE7, long lngE7) {
+  public final SuplResponse generateSuplResult(long latE7, long lngE7) {
     try {
       SUPLPOS message = sendSuplRequest(latE7, lngE7);
       return message != null ? suplPosToEphResponse(message) : null;
@@ -140,8 +140,8 @@ abstract class SuplClient {
   protected abstract void validateAssistanceData(SUPLPOS message);
 
   /**
-   * Builds an instance of {@link EphemerisResponse} with the assistance data from the values stored
+   * Builds an instance of {@link SuplResponse} with the assistance data from the values stored
    * in the input {@link SUPLPOS}.
    */
-  protected abstract EphemerisResponse suplPosToEphResponse(SUPLPOS message);
+  protected abstract SuplResponse suplPosToEphResponse(SUPLPOS message);
 }

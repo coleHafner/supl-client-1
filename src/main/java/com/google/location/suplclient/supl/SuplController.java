@@ -14,14 +14,12 @@
 
 package com.google.location.suplclient.supl;
 
-import com.google.location.suplclient.ephemeris.EphemerisResponse;
-
 /**
  * A class that applies the SUPL protocol call flow to obtain GPS assistance data over a TCP
  * connection.
  *
  * <p>A rough location of the receiver has to be known in advance which is passed to the method
- * {@link #generateEphResponse} to obtain a {@link EphemerisResponse} containing the GNSS assistance
+ * {@link #generateEphResponse} to obtain a {@link SuplResponse} containing the GNSS assistance
  * data.
  */
 public class SuplController {
@@ -34,9 +32,9 @@ public class SuplController {
 
   /**
    * Applies the SUPL protocol call flow to obtain the assistance data and store the result in
-   * {@link EphemerisResponse}.
+   * {@link SuplResponse}.
    */
-  public EphemerisResponse generateEphResponse(long latE7, long lngE7) {
+  public SuplResponse generateEphResponse(long latE7, long lngE7) {
     return client.generateSuplResult(latE7, lngE7);
   }
 

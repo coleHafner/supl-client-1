@@ -12,14 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.location.suplclient.ephemeris;
+package com.google.location.suplclient.supl;
 
+import com.google.location.suplclient.ephemeris.GnssEphemeris;
 import com.google.location.suplclient.iono.GnssIonoModel;
+import com.google.location.suplclient.utc.GnssUtcModel;
 
 import java.util.List;
 
 /** A container for GNSS satellite ephemeris and Ionospheric model parameters. */
-public class EphemerisResponse {
+public class SuplResponse {
 
   /* A list of ephemeris for GNSS satellites */
   public final List<GnssEphemeris> ephList;
@@ -27,9 +29,13 @@ public class EphemerisResponse {
   /* The parameters of the ionospheric model */
   public final List<GnssIonoModel> ionoModelList;
 
+  /* The parameters of the utc clock model */
+  public final List<GnssUtcModel> utcModelList;
+
   /* Constructor */
-  public EphemerisResponse(List<GnssEphemeris> ephList, List<GnssIonoModel> ionoModelList) {
+  public SuplResponse(List<GnssEphemeris> ephList, List<GnssIonoModel> ionoModelList, List<GnssUtcModel> utcModelList) {
     this.ephList = ephList;
     this.ionoModelList = ionoModelList;
+    this.utcModelList = utcModelList;
   }
 }
