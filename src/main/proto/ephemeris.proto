@@ -27,6 +27,7 @@ message GpsTimeProto {
 }
 
 // Klobuchar Ionospheric Model
+/*
 message IonosphericModelProto {
   // Time used for generating this data (typically, the queried time).
   optional GpsTimeProto data_time = 1;
@@ -37,4 +38,4 @@ message IonosphericModelProto {
   // Period parameters.
   repeated double beta = 3;
 }
-
+*/

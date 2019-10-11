@@ -54,5 +54,12 @@ public final class SuplTester {
     // Try to call methods to access SUPL server and see if they report any exception
     suplController.sendSuplRequest(latE7, lngE7);
     SuplResponse suplResponse = suplController.generateEphResponse(latE7, lngE7);
+
+    // System.out.println("\n\n");
+    // for (int i = 0; i < suplResponse.ephList.size(); i++) {
+    //     System.out.println(suplResponse.ephList.get(i));
+    // }
+
+    // List<GnssEphemeris> listEphemris = ephResponse.ephList;
   }
 }

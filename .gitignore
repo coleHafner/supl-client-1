@@ -7,3 +7,11 @@
 #Exclude IntelliJ IDEA project directories
 .idea/
 target/
+.DS_Store
+.factorypath
+.project
+.settings/
+.vscode/
+bin/
+com/
+ephemeris.proto
