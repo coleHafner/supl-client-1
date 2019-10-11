@@ -80,10 +80,9 @@ brew install protobuf@3.6
 echo 'export PATH="/usr/local/opt/protobuf@3.6/bin:$PATH"' >> ~/.zshrc
 ```
 
-## Download the Repo
+## Clone the Repo
 ```bash
-git clone https://github.com/google/supl-client.git
-cd supl-client
+git clone https://github.com/coleHafner/supl-client-1.git
 ```
 
 ## Point to the Correct Installation Path of Protobuf
@@ -153,7 +152,7 @@ cd supl-client
 ## Build and run the .jar file
 ```bash
 # build the package
-cd supl-client
+cd supl-client-1
 mvn clean package
 
 # send a request the Google SUPL server
@@ -201,6 +200,6 @@ Class-Path: protobuf-java-3.4.0.jar protobuf-maven-plugin-0.6.1.jar mave
  gle-http-client-1.11.0-beta.jar httpclient-4.0.3.jar httpcore-4.0.1.jar
   commons-logging-1.1.1.jar commons-codec-1.3.jar xpp3-1.1.4c.jar jetty-
  6.1.26.jar jetty-util-6.1.26.jar servlet-api-2.5-20081211.jar jsr305-1.
- 3.7.jar mail-1.4.jar activation-1.1.jar #these are the dependencies
+ 3.7.jar mail-1.4.jar activation-1.1.jar # these are the dependencies
 
 ```
