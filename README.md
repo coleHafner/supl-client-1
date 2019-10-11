@@ -45,19 +45,18 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-13.jdk/Contents/Home
 ## Download and Install Maven
 > Download it [from here](https://maven.apache.org/download.cgi). I downloaded version `3.6.2`.
 > 
-> #### Verify the Signature of Maven (optional)
-> Grab [the keyfile](https://www.apache.org/dist/maven/KEYS) and save it as `apache-maven-keys`
-> 
-> Download the [signature file](https://www.apache.org/dist/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.tar.gz.asc) and save it as `apache-maven-3.6.2-bin.tar.gz.asc`
+> You can verify the signature of the download, if you're into that: 
+- Grab [the keyfile](https://www.apache.org/dist/maven/KEYS) and save it as `apache-maven-keys`
+- Download the [signature file](https://www.apache.org/dist/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.tar.gz.asc) and save it as `apache-maven-3.6.2-bin.tar.gz.asc`
 
 ```bash
-# install gpg (if necessary)
+# OPTIONAL: install gpg (if necessary)
 brew install gnupg
 
-# add the keyfile to your keyring
+# OPTIONAL: add the keyfile to your keyring
 gpg --import apache-maven-keys
 
-# verify the signature
+# OPTIONAL: verify the signature
 gpg --verify apache-maven-3.6.2-bin.tar.gz.asc apache-maven-3.6.2-bin.tar.gz
 
 # move it to your home dir an decompress
