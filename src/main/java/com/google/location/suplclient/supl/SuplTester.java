@@ -35,7 +35,7 @@ public final class SuplTester {
 
   private static final long lngE7 = -1220841890;
 
-  public static void main(String[] args) throws Exception {
+  public static void main() throws Exception {
     SuplTester tester = new SuplTester();
     tester.runStepByStepTcpClientTest();
   }

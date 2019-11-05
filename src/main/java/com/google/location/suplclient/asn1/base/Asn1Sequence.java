@@ -19,6 +19,7 @@ package com.google.location.suplclient.asn1.base;
 import com.google.common.collect.ImmutableList;
 
 import java.nio.ByteBuffer;
+import java.nio.Buffer;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
@@ -100,8 +101,8 @@ public abstract class Asn1Sequence extends Asn1Object {
     Iterable<? extends SequenceComponent> components = getComponents();
 
     while (buf.hasRemaining()) {
-      int bufStartPos = buf.position();
-      int bufEndPos = buf.limit();
+      int bufStartPos = ((Buffer)buf).position();
+      int bufEndPos = ((Buffer)buf).limit();
       Asn1Tag tag = Asn1Tag.readTag(buf);
       SequenceComponent component = getComponent(components, tag);
       if (component.isExplicitlySet()) {
@@ -109,7 +110,7 @@ public abstract class Asn1Sequence extends Asn1Object {
       }
       component.setToNewInstance();
       int valueLength = Asn1Tag.readLength(buf);
-      buf.limit(buf.position() + valueLength);
+      ((Buffer)buf).limit(((Buffer)buf).position() + valueLength);
       if (component.getTag() != null) {
         if (component.isImplicitTagging()) {
           component.getComponentValue().decodeBerValue(buf);
@@ -117,10 +118,10 @@ public abstract class Asn1Sequence extends Asn1Object {
           component.getComponentValue().decodeBer(buf);
         }
       } else {
-        buf.position(bufStartPos); // rewind to before tag
+        ((Buffer)buf).position(bufStartPos); // rewind to before tag
         component.getComponentValue().decodeBer(buf);
       }
-      buf.limit(bufEndPos); // set the limit back to the real end position
+      ((Buffer)buf).limit(bufEndPos); // set the limit back to the real end position
     }
 
     checkMandatoryFieldsPresent(components);

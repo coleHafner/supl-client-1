@@ -20,6 +20,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 import java.nio.ByteBuffer;
+import java.nio.Buffer;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -95,12 +96,12 @@ public abstract class Asn1SequenceOf<T extends Asn1Object> extends Asn1Object {
       } else {
         checkTag(tag, value.getDefaultTag());
       }
-      ByteBuffer subBuf = ByteBuffer.wrap(buf.array(), buf.position(), valueLength);
+      ByteBuffer subBuf = ByteBuffer.wrap(buf.array(), ((Buffer)buf).position(), valueLength);
       value.decodeBerValue(subBuf);
       if (subBuf.hasRemaining()) {
         throw new IllegalArgumentException("child failed to consume all input");
       }
-      buf.position(buf.position() + valueLength);
+      ((Buffer)buf).position(((Buffer)buf).position() + valueLength);
     }
   }
 

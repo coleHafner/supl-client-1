@@ -19,6 +19,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -70,7 +71,7 @@ final class SuplTcpConnection {
     byte[] buffer = new byte[RESPONSE_BUFFER_SIZE];
     int sizeOfRead = bufferedInputStream.read(buffer, 0, HEADER_SIZE);
     if (sizeOfRead == HEADER_SIZE) {
-      messageLengthReadBuffer.clear();
+      ((Buffer)messageLengthReadBuffer).clear();
       messageLengthReadBuffer.put(0, buffer[0]);
       messageLengthReadBuffer.put(1, buffer[1]);
       int messageLength = messageLengthReadBuffer.getShort(0);

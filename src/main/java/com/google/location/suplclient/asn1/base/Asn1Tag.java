@@ -17,6 +17,7 @@ package com.google.location.suplclient.asn1.base;
 import com.google.common.annotations.VisibleForTesting;
 
 import java.math.BigInteger;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
 import javax.annotation.Nullable;
@@ -117,7 +118,7 @@ public class Asn1Tag {
    * Returns the tag at the head of the buffer without advancing the position.
    */
   static Asn1Tag peekTag(ByteBuffer buf) {
-    return Asn1Tag.fromValue(buf.get(buf.position()) & 0xFF);
+    return Asn1Tag.fromValue(buf.get(((Buffer)buf).position()) & 0xFF);
   }
 
   /**

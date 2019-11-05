@@ -20,6 +20,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 import java.nio.ByteBuffer;
+import java.nio.Buffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
@@ -261,7 +262,7 @@ public class Asn1IA5String extends Asn1Object {
         exploded.put((byte) reader.readLowBits(characterBitCount));
       }
     }
-    exploded.flip();
+    ((Buffer)exploded).flip();
     Charset charset = recodeValues ? new RestrictedCharset() : StandardCharsets.US_ASCII;
     try {
       CharBuffer valueCharacters = charset.newDecoder().decode(exploded);
